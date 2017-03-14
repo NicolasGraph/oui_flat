@@ -3,7 +3,7 @@
     "description" : "Edit Textpattern's database prefs, contents and page templates as flat files",
     "version"     : "0.6.0",
     "type"        : 1,
-    "author"      : "Nicolas Morand from Jukka Svahn's rah_flat",
+    "author"      : "Nicolas Morand, Jukka Svahn",
     "author_uri"  : "http://github.com/NicolasGraph",
     "order"       : 5,
     "flags"       : 3,

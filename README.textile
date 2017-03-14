@@ -185,6 +185,7 @@ h2(#Changelog). Changelog
 h3. Version 0.6.0 - 2017/03/14
 
 * Changed: Back to @oui_@ plugin author prefix.
+* Changed: Lighten compiled code by removing duplicated license infos.
 
 h3. Version 0.5.0 (rah_flat) - 2016/08/26
 
