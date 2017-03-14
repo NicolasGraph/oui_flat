@@ -1,31 +1,31 @@
 <?php
 
 /*
- * rah_flat - Flat templates for Textpattern CMS
- * https://github.com/gocom/rah_flat
+ * oui_flat - Flat templates for Textpattern CMS
+ * https://github.com/gocom/oui_flat
  *
  * Copyright (C) 2015 Jukka Svahn
  *
- * This file is part of rah_flat.
+ * This file is part of oui_flat.
  *
- * rah_flat is free software; you can redistribute it and/or
+ * oui_flat is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation, version 2.
  *
- * rah_flat is distributed in the hope that it will be useful,
+ * oui_flat is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with rah_flat. If not, see <http://www.gnu.org/licenses/>.
+ * along with oui_flat. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
  * Imports Textpacks.
  */
 
-class Rah_Flat_Import_Textpacks extends rah_flat_Import_Sections
+class Oui_Flat_Import_Textpacks extends oui_flat_Import_Sections
 {
 
     /**
@@ -50,7 +50,7 @@ class Rah_Flat_Import_Textpacks extends rah_flat_Import_Sections
      * {@inheritdoc}
      */
 
-    public function importTemplate(rah_flat_TemplateIterator $file)
+    public function importTemplate(oui_flat_TemplateIterator $file)
     {
         global $DB;
 
@@ -62,7 +62,7 @@ class Rah_Flat_Import_Textpacks extends rah_flat_Import_Sections
                 if ($r and (mysqli_affected_rows($DB->link) or safe_count($this->getTableName(), $where))) {
                     $r;
                 } else {
-                    $set .= ", owner = 'rah_flat_lang'";
+                    $set .= ", owner = 'oui_flat_lang'";
                     $where = implode(', ', (preg_split("/ AND /", $where)));
                     safe_insert($this->getTableName(), join(', ', array($where, $set)));
                 }
@@ -100,7 +100,7 @@ class Rah_Flat_Import_Textpacks extends rah_flat_Import_Sections
      * {@inheritdoc}
      */
 
-    public function dropRemoved(rah_flat_TemplateIterator $template)
+    public function dropRemoved(oui_flat_TemplateIterator $template)
     {
 
         while ($template->valid()) {
@@ -114,9 +114,9 @@ class Rah_Flat_Import_Textpacks extends rah_flat_Import_Sections
                         $name[] = "'".doSlash($key)."'";
                     }
                     if ($name) {
-                        safe_delete($this->getTableName(), $lang.' AND '.$event.' AND name not in ('.implode(',', $name).') AND owner = "rah_flat_lang"');
+                        safe_delete($this->getTableName(), $lang.' AND '.$event.' AND name not in ('.implode(',', $name).') AND owner = "oui_flat_lang"');
                     } else {
-                        safe_delete($this->getTableName(), $lang.' AND '.$event.' AND owner = "rah_flat_lang"');
+                        safe_delete($this->getTableName(), $lang.' AND '.$event.' AND owner = "oui_flat_lang"');
                     }
                 }
             }

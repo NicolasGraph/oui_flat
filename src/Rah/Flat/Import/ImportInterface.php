@@ -1,37 +1,37 @@
 <?php
 
 /*
- * rah_flat - Flat templates for Textpattern CMS
- * https://github.com/gocom/rah_flat
+ * oui_flat - Flat templates for Textpattern CMS
+ * https://github.com/gocom/oui_flat
  *
  * Copyright (C) 2015 Jukka Svahn
  *
- * This file is part of rah_flat.
+ * This file is part of oui_flat.
  *
- * rah_flat is free software; you can redistribute it and/or
+ * oui_flat is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation, version 2.
  *
- * rah_flat is distributed in the hope that it will be useful,
+ * oui_flat is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with rah_flat. If not, see <http://www.gnu.org/licenses/>.
+ * along with oui_flat. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
  * Interface for import definitions.
  *
  * <code>
- * class Abc_Import_Definition implements rah_flat_Import_ImportInterface
+ * class Abc_Import_Definition implements oui_flat_Import_ImportInterface
  * {
  * }
  * </code>
  */
 
-interface Rah_Flat_Import_ImportInterface
+interface Oui_Flat_Import_ImportInterface
 {
     /**
      * Constructor.
@@ -41,7 +41,7 @@ interface Rah_Flat_Import_ImportInterface
      * be accessed manually.
      *
      * <code>
-     * new rah_flat_Import_Forms('forms');
+     * new oui_flat_Import_Forms('forms');
      * </code>
      *
      * @param string $directory The directory hosting the templates
@@ -83,7 +83,7 @@ interface Rah_Flat_Import_ImportInterface
      * @throws Exception
      */
 
-    public function dropRemoved(rah_flat_TemplateIterator $template);
+    public function dropRemoved(oui_flat_TemplateIterator $template);
 
     /**
      * Gets the panel name.
@@ -110,11 +110,11 @@ interface Rah_Flat_Import_ImportInterface
      * This method executes the SQL statement to import
      * the template file.
      *
-     * @param  rah_flat_TemplateIterator $file The template file
+     * @param  oui_flat_TemplateIterator $file The template file
      * @throws Exception
      */
 
-    public function importTemplate(rah_flat_TemplateIterator $file);
+    public function importTemplate(oui_flat_TemplateIterator $file);
 
     /**
      * Gets an array of database columns in the table.

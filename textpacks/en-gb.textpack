@@ -1,7 +1,7 @@
 #@admin
 #Default language, en-us, en-gb
-rah_flat => Template files (rah_flat)
-rah_flat_path => Templates path
-rah_flat_key => Update key
-rah_flat_upload_levels => Production status for the systematic upload
-rah_flat_var => Template variables (rah_flat)
+oui_flat => Template files (oui_flat)
+oui_flat_path => Templates path
+oui_flat_key => Update key
+oui_flat_upload_levels => Production status for the systematic upload
+oui_flat_var => Template variables (oui_flat)
