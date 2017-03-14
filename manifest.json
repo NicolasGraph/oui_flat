@@ -1,9 +1,9 @@
 {
-    "name"        : "rah_flat",
+    "name"        : "oui_flat",
     "description" : "Edit Textpattern's database prefs, contents and page templates as flat files",
-    "version"     : "0.5.0",
+    "version"     : "0.6.0",
     "type"        : 1,
-    "author"      : "Jukka Svahn (forked by Nicolas Morand)",
+    "author"      : "Nicolas Morand from Jukka Svahn's rah_flat",
     "author_uri"  : "http://github.com/NicolasGraph",
     "order"       : 5,
     "flags"       : 3,

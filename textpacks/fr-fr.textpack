@@ -1,7 +1,7 @@
 #@admin
 #@language fr-fr
-rah_flat => Fichiers du thème (rah_flat)
-rah_flat_path => Chemin vers les fichiers
-rah_flat_key => Clé de mise à jour
-rah_flat_upload_levels => Statut(s) de production pour le téléchargement systématique
-rah_flat_var => Variables du thème (rah_flat)
+oui_flat => Fichiers du thème (oui_flat)
+oui_flat_path => Chemin vers les fichiers
+oui_flat_key => Clé de mise à jour
+oui_flat_upload_levels => Statut(s) de production pour le téléchargement systématique
+oui_flat_var => Variables du thème (oui_flat)

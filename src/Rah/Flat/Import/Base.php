@@ -1,24 +1,24 @@
 <?php
 
 /*
- * rah_flat - Flat templates for Textpattern CMS
- * https://github.com/gocom/rah_flat
+ * oui_flat - Flat templates for Textpattern CMS
+ * https://github.com/gocom/oui_flat
  *
  * Copyright (C) 2015 Jukka Svahn
  *
- * This file is part of rah_flat.
+ * This file is part of oui_flat.
  *
- * rah_flat is free software; you can redistribute it and/or
+ * oui_flat is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation, version 2.
  *
- * rah_flat is distributed in the hope that it will be useful,
+ * oui_flat is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with rah_flat. If not, see <http://www.gnu.org/licenses/>.
+ * along with oui_flat. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -28,11 +28,11 @@
  * this class or its theriatives.
  *
  * For instance the following would create a new import
- * definition using the rah_flat_Import_Pages as the
+ * definition using the oui_flat_Import_Pages as the
  * base:
  *
  * <code>
- * class Abc_My_Import_Definition extends rah_flat_Import_Pages
+ * class Abc_My_Import_Definition extends oui_flat_Import_Pages
  * {
  *     public function getPanelName()
  *     {
@@ -58,7 +58,7 @@
  * </code>
  */
 
-abstract class Rah_Flat_Import_Base implements rah_flat_Import_ImportInterface
+abstract class Oui_Flat_Import_Base implements oui_flat_Import_ImportInterface
 {
     /**
      * The directory.
@@ -83,7 +83,7 @@ abstract class Rah_Flat_Import_Base implements rah_flat_Import_ImportInterface
     public function __construct($directory)
     {
         $this->directory = $directory;
-        register_callback(array($this, 'init'), 'rah_flat.import_to_database');
+        register_callback(array($this, 'init'), 'oui_flat.import_to_database');
         $this->dropPermissions();
     }
 
@@ -93,7 +93,7 @@ abstract class Rah_Flat_Import_Base implements rah_flat_Import_ImportInterface
 
     public function getTemplateIterator($directory)
     {
-        return new rah_flat_TemplateIterator($directory);
+        return new oui_flat_TemplateIterator($directory);
     }
 
     /**
@@ -102,7 +102,7 @@ abstract class Rah_Flat_Import_Base implements rah_flat_Import_ImportInterface
 
     public function getDirectoryPath()
     {
-        if ($this->directory && ($directory = get_pref('rah_flat_path'))) {
+        if ($this->directory && ($directory = get_pref('oui_flat_path'))) {
             $directory = txpath . '/' . $directory . '/' . $this->directory;
             return $directory;
         }

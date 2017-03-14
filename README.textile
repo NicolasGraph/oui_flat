@@ -1,6 +1,6 @@
-h1. rah_flat
+h1. oui_flat
 
-"Download":https://github.com/NicolasGraph/rah_flat/releases | "Donate to the original author":http://rahforum.biz/donate/rah_flat
+"Download":https://github.com/NicolasGraph/oui_flat/releases
 
 This plugin makes your "Textpattern CMS":http://www.textpattern.com database more flat, manageable and editable. Edit templates, forms, pages, preferences, variables and sections as flat files. Use any editor, work in teams and store your website's source under your favorite "version control system":http://en.wikipedia.org/wiki/Revision_control.
 
@@ -24,7 +24,7 @@ h2. Table of contents
 
 h2(#requirements). Plugin requirements
 
-rah_flat’s minimum requirements:
+oui_flat’s minimum requirements:
 
 * Textpattern 4.5+
 
@@ -39,7 +39,7 @@ h2(#prefs). Preferences / options
 * *Security key for the public callback* - Security key for the public callback hook URL. Importing is done when the URL is accessed. The URL follows the format of:
 * *Production status for the systematic upload* - The site production status for which you want to activate the systematic templates upload (see "Basics":#basics).
 
-bc. http://example.com/?rah_flat_key={yourKey}
+bc. http://example.com/?oui_flat_key={yourKey}
 
 Where @http://example.com/@ is your site's URL, and @{yourKey}@ is the security key you specified.
 
@@ -52,7 +52,7 @@ Your flat files are imported to the database:
 
 1. Variables are imported only once to avoid the override of user strings. To update them, remove or rename .json files and refresh.
 
-If you want to exclude a certain content type from importing, just don't create a directory for it. No directory, and rah_flat will leave the database alone when it comes to that content type.
+If you want to exclude a certain content type from importing, just don't create a directory for it. No directory, and oui_flat will leave the database alone when it comes to that content type.
 
 h3. About variables
 
@@ -135,7 +135,7 @@ Here is an example of content for a @menu_sections.json@ file.
 bc.. {
     "value": "articles, about, contact",
     "type": "PREF_HIDDEN",
-    "event": "rah_flat_var",
+    "event": "oui_flat_var",
     "html": "text_input",
     "position": "10",
     "is_private": true
@@ -145,12 +145,12 @@ p. where each data is optional and the default values are the following:
 
 * @"value": "…"@ - _default: '' (empty)_ - The default value of the preference.
 * @"type": "…"@ - _default: PREF_PLUGIN (for Txp 4.6, else PREF_ADVANCED)_ - To hide a pref in the _Preferences_ tab, use _PREF_HIDDEN_, you should probably not use _PREF_CORE_.
-* "event": "…" - _default: 'rah_flat_var'_ - The prefs group name where you want to display your custom pref.
+* "event": "…" - _default: 'oui_flat_var'_ - The prefs group name where you want to display your custom pref.
 * @"html": "…"@ - _default: 'text_input'_ - To display radio buttons, use _onoffradio_ or _yesnoradio_.
 * @"position": "…"@ - _default: 0_ - Use position to sort your prefs.
 * @"is_private": "…"@ - _default: false_ - If _true_, the pref will be user related.
 
-p. While you can call your custom preference as a Txp variable like so: @<txp:variable name="menu_sections" />@; they will be prefixed with @rah_flat_var_@ under the preferences tab and you will need to use the textpack as below to add user friendly titles.
+p. While you can call your custom preference as a Txp variable like so: @<txp:variable name="menu_sections" />@; they will be prefixed with @oui_flat_var_@ under the preferences tab and you will need to use the textpack as below to add user friendly titles.
 
 h3(#textpacks). Textpacks
 
@@ -158,7 +158,7 @@ Here is an example of content for a @en-gb.json@ file.
 
 bc.. {
     "admin": {
-        "rah_flat_var_menu_sections": "Sections used in the menu"
+        "oui_flat_var_menu_sections": "Sections used in the menu"
     },
     "common": {
     },
@@ -172,7 +172,7 @@ p. Text strings are only updated if they already exist, otherwise, they can be i
 
 h2(#author). Author
 
-"Jukka Svahn":http://rahforum.biz/, forked by "Nicolas Morand":https://github.com/ from v0.3.0.
+"Nicolas Morand":https://github.com/, from "rah_flat":https://github.com/gocom/rah_flat by "Jukka Svahn":http://rahforum.biz/.
 
 h2(#licence). Licence
 
@@ -182,16 +182,20 @@ h2(#Changelog). Changelog
 
 * To do: Fix the _Options_ link.
 
-h3. Version 0.5.0- 2016/08/26
+h3. Version 0.6.0 - 2017/03/14
+
+* Changed: Back to @oui_@ plugin author prefix.
+
+h3. Version 0.5.0 (rah_flat) - 2016/08/26
 
 * Changed: Forms are stored by types in subfolders and don't need prefixes anymore.
 * Added: Custom form types are changed to 'misc' when the plugin is disable to avoid an error in the Forms tab.
 * Changed: Preferences update affects values only.
 * Added: Prefs are hidden in the admin if set via flat files and get back to visible when the plugin is disabled.
 * Added: Custom prefs (in the variables folder) accept more paramters in .json files.
-* Changed: Custom prefs (in the variables folder) now have a rah_flat_var_ prefix added to their name.
+* Changed: Custom prefs (in the variables folder) now have a oui_flat_var_ prefix added to their name.
 
-h3. Version 0.4.0 (oui_flat) - 2015/11/29
+h3. Version 0.4.0 - 2015/11/29
 
 * Changed: Forked by Nicolas Morand.
 * Added: Custom preferences can be created and use as Txp variables.
@@ -200,12 +204,12 @@ h3. Version 0.4.0 (oui_flat) - 2015/11/29
 h3. Version 0.3.0 - 2014/03/28
 
 * Added: Drop access to a admin-side panel only if the specific content-type is active and has a directory set up.
-* Added: Invokable @rah_flat.import@ callback event.
+* Added: Invokable @oui_flat.import@ callback event.
 * Added: Sections and preferences get their names from the filename.
 * Added: Preferences are always just updated, no strands are created.
 * Added: Preference fields that are not specified in a file are kept as-is in the database.
 * Added: French translation by "Patrick Lefevre":https://github.com/cara-tm.
-* Changed: Renamed confusing @rah_flat_Import_Template@ interface to @rah_flat_Import_ImportInterface@.
+* Changed: Renamed confusing @oui_flat_Import_Template@ interface to @oui_flat_Import_ImportInterface@.
 
 h3. Version 0.2.0 - 2014/03/19
 
