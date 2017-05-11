@@ -30,6 +30,12 @@ oui_flat’s minimum requirements:
 
 h2(#installation). Installation
 
+h3. Via composer
+
+bc. $ composer require oui/oui_flat
+
+h3. Manually
+
 # Paste the content of the plugin file under the *Admin > Plugins*, upload it and install;
 # Visit the *Admin>Preferences* tab to fill the plugin prefs.
 
@@ -198,24 +204,5 @@ h3. Version 0.5.0 (rah_flat) - 2016/08/26
 
 h3. Version 0.4.0 - 2015/11/29
 
-* Changed: Forked by Nicolas Morand.
 * Added: Custom preferences can be created and use as Txp variables.
 * Changed: Forms naming convention is now @type.name.txp@.
-
-h3. Version 0.3.0 - 2014/03/28
-
-* Added: Drop access to a admin-side panel only if the specific content-type is active and has a directory set up.
-* Added: Invokable @oui_flat.import@ callback event.
-* Added: Sections and preferences get their names from the filename.
-* Added: Preferences are always just updated, no strands are created.
-* Added: Preference fields that are not specified in a file are kept as-is in the database.
-* Added: French translation by "Patrick Lefevre":https://github.com/cara-tm.
-* Changed: Renamed confusing @oui_flat_Import_Template@ interface to @oui_flat_Import_ImportInterface@.
-
-h3. Version 0.2.0 - 2014/03/19
-
-* Reworked.
-
-h3. Version 0.1.0 - 2013/05/07
-
-* Initial release.
