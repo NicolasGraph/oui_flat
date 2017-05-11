@@ -30,6 +30,12 @@ oui_flat’s minimum requirements:
 
 h2(#installation). Installation
 
+h3. Via composer
+
+bc. $ composer require oui/oui_flat
+
+h3. Manually
+
 # Paste the content of the plugin file under the *Admin > Plugins*, upload it and install;
 # Visit the *Admin>Preferences* tab to fill the plugin prefs.
 
