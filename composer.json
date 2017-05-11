@@ -1,6 +1,6 @@
 {
-    "name": "nicolasgraph/oui_flat",
-    "description": "Textpattern CMS templates as flat files",
+    "name": "oui/oui_flat",
+    "description": "Flat theme management plugin for Textpattern CMS",
     "keywords": ["textpattern", "plugin", "flat", "template"],
     "homepage": "https://github.com/nicolasgraph/oui_flat",
     "license": "GPL-2.0",
