@@ -2,9 +2,9 @@
 
 /*
  * oui_flat - Flat templates for Textpattern CMS
- * https://github.com/gocom/oui_flat
+ * https://github.com/nicolasgraph/oui_flat
  *
- * Copyright (C) 2015 Jukka Svahn
+ * Copyright (C) 2017 Jukka Svahn
  *
  * This file is part of oui_flat.
  *
@@ -27,17 +27,21 @@
  * This class iterates over template files.
  *
  * <code>
- * $template = new oui_flat_TemplateIterator();
- * while ($template->valid()) {
- *  $template->getTemplateName();
- *  $template->getTemplateContents();
+ * $templates = new RecursiveIteratorIterator(
+ *     new Oui_Flat_FilterIterator(
+ *         new Oui_Flat_TemplateIterator('/path/to/dir')
+ *     )
+ * );
+ * foreach ($templates as $template) {
+ *     $template->getTemplateName();
+ *     $template->getTemplateContents();
  * }
  * </code>
  *
- * @see DirectoryIterator
+ * @see \RecursiveDirectoryIterator
  */
 
-class Oui_Flat_TemplateIterator extends DirectoryIterator
+class Oui_Flat_TemplateIterator extends RecursiveDirectoryIterator
 {
     /**
      * Template name pattern.
@@ -48,7 +52,22 @@ class Oui_Flat_TemplateIterator extends DirectoryIterator
      * @var string
      */
 
-    protected $templateNamePattern = '/[a-z][a-z0-9_\-\.]{1,63}\.[a-z0-9]+/i';
+    protected $templateNamePattern = '/[a-z][a-z0-9_\-\.]{0,63}\.[a-z0-9]+/i';
+
+    /**
+     * {@inheritdoc}
+     */
+
+    public function __construct($path, $flags = null)
+    {
+        if ($flags === null) {
+            $flags = FilesystemIterator::FOLLOW_SYMLINKS |
+                FilesystemIterator::CURRENT_AS_SELF |
+                FilesystemIterator::SKIP_DOTS;
+        }
+
+        parent::__construct($path, $flags);
+    }
 
     /**
      * Gets the template contents.
@@ -62,7 +81,7 @@ class Oui_Flat_TemplateIterator extends DirectoryIterator
             return preg_replace('/[\r|\n]+$/', '', $contents);
         }
 
-        throw new Exception('Unable to read ' . $this->getFilename() . '.');
+        throw new Exception('Unable to read.');
     }
 
     /**
@@ -78,7 +97,7 @@ class Oui_Flat_TemplateIterator extends DirectoryIterator
             return $file;
         }
 
-        throw new Exception('Invalid JSON file ' . $this->getFilename() . '.');
+        throw new Exception('Invalid JSON file.');
     }
 
     /**
@@ -95,10 +114,10 @@ class Oui_Flat_TemplateIterator extends DirectoryIterator
     /**
      * Validates a template file name and stats.
      *
-     * Template file must be a regular file or symbolic links,
-     * readable and the name must be fewer than 64 characters long,
-     * start with an ASCII character, followed by A-z, 0-9, -, _ and
-     * and ends to a file extension.
+     * Template file must be a regular file or a symbolic link,
+     * readable and the name must be fewer than 65 characters long,
+     * start with an ASCII character (A-z), followed by A-z, 0-9, -, _ and
+     * and end to a file extension.
      *
      * Valid template name would include:
      *
@@ -115,6 +134,7 @@ class Oui_Flat_TemplateIterator extends DirectoryIterator
      * <code>
      * .sitename
      * _form.misc.txp
+     * 0template.html
      * </code>
      *
      * @return bool TRUE if the name is valid
@@ -126,24 +146,6 @@ class Oui_Flat_TemplateIterator extends DirectoryIterator
             return (bool) preg_match($this->templateNamePattern, $this->getFilename());
         }
 
-        return false;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-
-    public function valid()
-    {
-        while (parent::valid() && !$this->isValidTemplate()) {
-            $this->next();
-        }
-
-        if (parent::valid()) {
-            return true;
-        }
-
-        $this->rewind();
         return false;
     }
 }

@@ -2,9 +2,9 @@
 
 /*
  * oui_flat - Flat templates for Textpattern CMS
- * https://github.com/gocom/oui_flat
+ * https://github.com/nicolasgraph/oui_flat
  *
- * Copyright (C) 2015 Jukka Svahn
+ * Copyright (C) 2017 Jukka Svahn
  *
  * This file is part of oui_flat.
  *
@@ -22,10 +22,10 @@
  */
 
 /**
- * Imports page templates.
+ * Imports preferences.
  */
 
-class Oui_Flat_Import_Pages extends oui_flat_Import_Base
+class Oui_Flat_Import_Prefs extends Oui_Flat_Import_Sections
 {
     /**
      * {@inheritdoc}
@@ -33,7 +33,6 @@ class Oui_Flat_Import_Pages extends oui_flat_Import_Base
 
     public function getPanelName()
     {
-        return 'page';
     }
 
     /**
@@ -42,39 +41,36 @@ class Oui_Flat_Import_Pages extends oui_flat_Import_Base
 
     public function getTableName()
     {
-        return 'txp_page';
+        return 'txp_prefs';
     }
 
     /**
      * {@inheritdoc}
      */
 
-    public function importTemplate(oui_flat_TemplateIterator $file)
+    public function importTemplate(Oui_Flat_TemplateIterator $file)
     {
-        safe_upsert(
-            $this->getTableName(),
-            "user_html = '".doSlash($file->getTemplateContents())."'",
-            "name = '".doSlash($file->getTemplateName())."'"
-        );
-    }
+        $sql = array();
+        $where = "name = '".doSlash($file->getTemplateName())."' and user_name = ''";
 
-    /**
-     * {@inheritdoc}
-     */
-
-    public function dropRemoved(oui_flat_TemplateIterator $template)
-    {
-        $name = array();
-
-        while ($template->valid()) {
-            $name[] = "'".doSlash($template->getTemplateName())."'";
-            $template->next();
-        }
-
-        if ($name) {
-            safe_delete($this->getTableName(), 'name not in ('.implode(',', $name).')');
+        if ($file->getExtension() === 'json') {
+            foreach ($file->getTemplateJSONContents() as $key => $value) {
+                if (in_array(strtolower((string) $key), $this->getTableColumns(), true)) {
+                    $sql[] = $this->formatStatement($key, $value);
+                }
+            }
         } else {
-            safe_delete($this->getTableName(), '1 = 1');
+            $sql[] = 'val = "' . doSlash($file->getTemplateContents()) . '"';
         }
+
+        return $sql && safe_update($this->getTableName(), implode(',', $sql), $where);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+
+    public function dropRemoved(Iterator $template)
+    {
     }
 }

@@ -1,7 +1,6 @@
 #@admin
-#Default language, en-us, en-gb
-oui_flat => Template files (oui_flat)
-oui_flat_path => Templates path
-oui_flat_key => Update key
-oui_flat_upload_levels => Production status for the systematic upload
-oui_flat_var => Template variables (oui_flat)
+oui_flat => Flat template files
+oui_flat_key => Security key for the public callback
+oui_flat_path => Path to the templates directory
+oui_flat_status => Production status for the systematic upload
+oui_flat_variables => Template variables

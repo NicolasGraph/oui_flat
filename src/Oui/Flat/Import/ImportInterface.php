@@ -2,9 +2,9 @@
 
 /*
  * oui_flat - Flat templates for Textpattern CMS
- * https://github.com/gocom/oui_flat
+ * https://github.com/nicolasgraph/oui_flat
  *
- * Copyright (C) 2015 Jukka Svahn
+ * Copyright (C) 2017 Jukka Svahn
  *
  * This file is part of oui_flat.
  *
@@ -25,7 +25,7 @@
  * Interface for import definitions.
  *
  * <code>
- * class Abc_Import_Definition implements oui_flat_Import_ImportInterface
+ * class Abc_Import_Definition implements Oui_Flat_Import_ImportInterface
  * {
  * }
  * </code>
@@ -41,13 +41,22 @@ interface Oui_Flat_Import_ImportInterface
      * be accessed manually.
      *
      * <code>
-     * new oui_flat_Import_Forms('forms');
+     * new Oui_Flat_Import_Forms('forms');
      * </code>
      *
      * @param string $directory The directory hosting the templates
      */
 
     public function __construct($directory);
+
+    /**
+     * Gets a new template iterator instance.
+     *
+     * @param string $directory The directory hosting the templates
+     * @return \RecursiveIteratorIterator
+     */
+
+    public function getTemplateIterator($directory);
 
     /**
      * Initializes the importer.
@@ -80,10 +89,11 @@ interface Oui_Flat_Import_ImportInterface
      * present in the flat directory, but for some it might
      * not do anything.
      *
+     * @param Iterator $templates
      * @throws Exception
      */
 
-    public function dropRemoved(oui_flat_TemplateIterator $template);
+    public function dropRemoved(Iterator $templates);
 
     /**
      * Gets the panel name.
@@ -105,16 +115,28 @@ interface Oui_Flat_Import_ImportInterface
     public function getTableName();
 
     /**
+     * Gets essential items that should not be removed from the database.
+     *
+     * This method needs to either return an array, or an iterator
+     * that implements toString().
+     *
+     * @return array|Iterator
+     * @since 0.4.0
+     */
+
+    public function getEssentials();
+
+    /**
      * Imports the template file.
      *
      * This method executes the SQL statement to import
      * the template file.
      *
-     * @param  oui_flat_TemplateIterator $file The template file
+     * @param  Oui_Flat_TemplateIterator $file The template file
      * @throws Exception
      */
 
-    public function importTemplate(oui_flat_TemplateIterator $file);
+    public function importTemplate(Oui_Flat_TemplateIterator $file);
 
     /**
      * Gets an array of database columns in the table.

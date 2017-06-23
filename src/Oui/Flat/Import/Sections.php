@@ -2,9 +2,9 @@
 
 /*
  * oui_flat - Flat templates for Textpattern CMS
- * https://github.com/gocom/oui_flat
+ * https://github.com/nicolasgraph/oui_flat
  *
- * Copyright (C) 2015 Jukka Svahn
+ * Copyright (C) 2017 Jukka Svahn
  *
  * This file is part of oui_flat.
  *
@@ -25,7 +25,7 @@
  * Imports sections.
  */
 
-class Oui_Flat_Import_Sections extends oui_flat_Import_Pages
+class Oui_Flat_Import_Sections extends Oui_Flat_Import_Base
 {
     /**
      * {@inheritdoc}
@@ -49,7 +49,7 @@ class Oui_Flat_Import_Sections extends oui_flat_Import_Pages
      * {@inheritdoc}
      */
 
-    public function importTemplate(oui_flat_TemplateIterator $file)
+    public function importTemplate(Oui_Flat_TemplateIterator $file)
     {
         $sql = array();
         $where = "name = '".doSlash($file->getTemplateName())."'";
