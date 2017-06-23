@@ -2,9 +2,9 @@
 
 /*
  * oui_flat - Flat templates for Textpattern CMS
- * https://github.com/gocom/oui_flat
+ * https://github.com/nicolasgraph/oui_flat
  *
- * Copyright (C) 2015 Jukka Svahn
+ * Copyright (C) 2017 Jukka Svahn
  *
  * This file is part of oui_flat.
  *
@@ -22,10 +22,10 @@
  */
 
 /**
- * Imports custom preferences (variables).
+ * Imports variables.
  */
 
-class Oui_Flat_Import_Variables extends oui_flat_Import_Prefs
+class Oui_Flat_Import_Variables extends Oui_Flat_Import_Base
 {
     /**
      * {@inheritdoc}
@@ -33,7 +33,7 @@ class Oui_Flat_Import_Variables extends oui_flat_Import_Prefs
 
     public function getPanelName()
     {
-        return 'prefs';
+        return 'prefs.oui_flat_variables';
     }
 
     /**
@@ -49,49 +49,39 @@ class Oui_Flat_Import_Variables extends oui_flat_Import_Prefs
      * {@inheritdoc}
      */
 
-    public function importTemplate(oui_flat_TemplateIterator $file)
+    public function importTemplate(Oui_Flat_TemplateIterator $file)
     {
         extract(lAtts(array(
             'value'      => '',
-            'type'       => defined('PREF_PLUGIN') ? 'PREF_PLUGIN' : 'PREF_ADVANCED',
-            'event'      => 'oui_flat_var',
+            'type'       => 'PREF_PLUGIN',
             'html'       => 'text_input',
             'position'   => '',
             'is_private' => false,
         ), $file->getTemplateJSONContents(), false));
 
-        $name = 'oui_flat_var_'.$file->getTemplateName();
+        $name = 'oui_flat_variable_' . $file->getTemplateName();
 
-        if (get_pref($name, false) === false) {
-            set_pref($name, $value, $event, constant($type), $html, $position, $is_private);
-        }
+        set_pref($name, $value, 'oui_flat_variables', constant($type), $html, $position, $is_private);
     }
 
     /**
      * {@inheritdoc}
      */
 
-    public function dropRemoved(oui_flat_TemplateIterator $template)
+    public function dropRemoved(Iterator $templates)
     {
-        $name = array();
+        $sql = $names = array();
 
-        while ($template->valid()) {
-            $name[] = "'oui_flat_var_".doSlash($template->getTemplateName())."'";
-            $template->next();
+        foreach ($templates as $template) {
+            $names[] = 'oui_flat_variable_' . $template->getTemplateName();
         }
 
-        if ($name) {
-            safe_delete($this->getTableName(), 'name like "rah\_flat\_var%" && name not in ('.implode(',', $name).')');
-        } else {
-            safe_delete($this->getTableName(), 'name like "rah\_flat\_var%"');
+        $sql[] = "event = 'oui_flat_variables'";
+
+        if ($names) {
+            $sql[] = "name not in(" . implode(',', quote_list($names)) . ")";
         }
-    }
 
-    /**
-     * {@inheritdoc}
-     */
-
-    public function dropPermissions()
-    {
+        safe_delete($this->getTableName(), implode(' and ', $sql));
     }
 }

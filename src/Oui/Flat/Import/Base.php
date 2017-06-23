@@ -2,9 +2,9 @@
 
 /*
  * oui_flat - Flat templates for Textpattern CMS
- * https://github.com/gocom/oui_flat
+ * https://github.com/nicolasgraph/oui_flat
  *
- * Copyright (C) 2015 Jukka Svahn
+ * Copyright (C) 2017 Jukka Svahn
  *
  * This file is part of oui_flat.
  *
@@ -28,11 +28,11 @@
  * this class or its theriatives.
  *
  * For instance the following would create a new import
- * definition using the oui_flat_Import_Pages as the
+ * definition using the Oui_Flat_Import_Pages as the
  * base:
  *
  * <code>
- * class Abc_My_Import_Definition extends oui_flat_Import_Pages
+ * class Abc_My_Import_Definition extends Oui_Flat_Import_Pages
  * {
  *     public function getPanelName()
  *     {
@@ -58,7 +58,7 @@
  * </code>
  */
 
-abstract class Oui_Flat_Import_Base implements oui_flat_Import_ImportInterface
+abstract class Oui_Flat_Import_Base implements Oui_Flat_Import_ImportInterface
 {
     /**
      * The directory.
@@ -80,6 +80,24 @@ abstract class Oui_Flat_Import_Base implements oui_flat_Import_ImportInterface
      * {@inheritdoc}
      */
 
+    public function getPanelName()
+    {
+        return '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+
+    public function getTableName()
+    {
+        return '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+
     public function __construct($directory)
     {
         $this->directory = $directory;
@@ -93,7 +111,11 @@ abstract class Oui_Flat_Import_Base implements oui_flat_Import_ImportInterface
 
     public function getTemplateIterator($directory)
     {
-        return new oui_flat_TemplateIterator($directory);
+        return new RecursiveIteratorIterator(
+            new Oui_Flat_FilterIterator(
+                new Oui_Flat_TemplateIterator($directory)
+            )
+        );
     }
 
     /**
@@ -130,17 +152,15 @@ abstract class Oui_Flat_Import_Base implements oui_flat_Import_ImportInterface
     public function init()
     {
         if ($this->isEnabled()) {
-            $template = $this->getTemplateIterator($this->getDirectoryPath());
+            $templates = $this->getTemplateIterator($this->getDirectoryPath());
 
-            while ($template->valid()) {
+            foreach ($templates as $template) {
                 if ($this->importTemplate($template) === false) {
                     throw new Exception('Unable to import ' . $template->getTemplateName());
                 }
-
-                $template->next();
             }
 
-            $this->dropRemoved($template);
+            $this->dropRemoved($templates);
         }
     }
 
@@ -159,12 +179,44 @@ abstract class Oui_Flat_Import_Base implements oui_flat_Import_ImportInterface
      * {@inheritdoc}
      */
 
+    public function getEssentials()
+    {
+        return array();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+
     public function getTableColumns()
     {
         if (!$this->columns) {
-            $this->columns = doArray((array) @getThings('describe '.safe_pfx($this->getTableName())), 'strtolower');
+            $this->columns = doArray((array) @getThings('describe ' . safe_pfx($this->getTableName())), 'strtolower');
         }
 
         return $this->columns;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+
+    public function dropRemoved(Iterator $templates)
+    {
+        $name = array();
+
+        foreach ($templates as $template) {
+            $name[] = "'" . doSlash($template->getTemplateName()) . "'";
+        }
+
+        foreach ($this->getEssentials() as $template) {
+            $name[] = "'" . doSlash((string) $template) . "'";
+        }
+
+        if ($name) {
+            safe_delete($this->getTableName(), 'name not in (' . implode(',', $name) . ')');
+        } else {
+            safe_delete($this->getTableName(), '1 = 1');
+        }
     }
 }

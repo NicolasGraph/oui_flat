@@ -2,9 +2,9 @@
 
 /*
  * oui_flat - Flat templates for Textpattern CMS
- * https://github.com/gocom/oui_flat
+ * https://github.com/nicolasgraph/oui_flat
  *
- * Copyright (C) 2015 Jukka Svahn
+ * Copyright (C) 2017 Jukka Svahn
  *
  * This file is part of oui_flat.
  *
@@ -25,9 +25,8 @@
  * Imports form partials.
  */
 
-class Oui_Flat_Import_Forms extends oui_flat_Import_Base
+class Oui_Flat_Import_Forms extends Oui_Flat_Import_Pages
 {
-
     /**
      * {@inheritdoc}
      */
@@ -50,31 +49,35 @@ class Oui_Flat_Import_Forms extends oui_flat_Import_Base
      * {@inheritdoc}
      */
 
-    public function importTemplate(oui_flat_TemplateIterator $file)
+    public function getEssentials()
+    {
+        return get_essential_forms();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+
+    public function getTemplateIterator($directory)
+    {
+        return new RecursiveIteratorIterator(
+            new Oui_Flat_FilterIterator(
+                new Oui_Flat_FormIterator($directory)
+            )
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+
+    public function importTemplate(Oui_Flat_TemplateIterator $file)
     {
         safe_upsert(
             $this->getTableName(),
             "Form = '".doSlash($file->getTemplateContents())."',
-            type = '".doSlash(substr($this->directory, strrpos($this->directory, '/') + 1))."'",
+            type = '".doSlash($file->getTemplateType())."'",
             "name = '".doSlash($file->getTemplateName())."'"
         );
-    }
-
-    public function dropRemoved(oui_flat_TemplateIterator $template)
-    {
-        $name = array();
-
-        while ($template->valid()) {
-            $name[] = "'".doSlash($template->getTemplateName())."'";
-            $template->next();
-        }
-
-        $formtype = substr($this->directory, strrpos($this->directory, '/') + 1);
-
-        if ($name) {
-            safe_delete($this->getTableName(), 'type = "'.doSlash($formtype).'" && name not in ('.implode(',', $name).')');
-        } else {
-            safe_delete($this->getTableName(), 'type = "'.doSlash($formtype).'"');
-        }
     }
 }

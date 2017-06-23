@@ -2,9 +2,9 @@
 
 /*
  * oui_flat - Flat templates for Textpattern CMS
- * https://github.com/gocom/oui_flat
+ * https://github.com/nicolasgraph/oui_flat
  *
- * Copyright (C) 2015 Jukka Svahn
+ * Copyright (C) 2017 Jukka Svahn
  *
  * This file is part of oui_flat.
  *
@@ -22,39 +22,26 @@
  */
 
 /**
- * Imports template styles.
+ * Filters template iterator results.
+ *
+ * This class iterates over template files.
+ *
+ * <code>
+ * $filteredTemplates = new Oui_Flat_FilterIterator(
+ *    Oui_Flat_TemplateIterator('/path/to/dir')
+ * );
+ * </code>
+ *
+ * @see \RecursiveFilterIterator
  */
 
-class Oui_Flat_Import_Styles extends oui_flat_Import_Pages
+class Oui_Flat_FilterIterator extends RecursiveFilterIterator
 {
     /**
      * {@inheritdoc}
      */
 
-    public function getPanelName()
-    {
-        return 'css';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-
-    public function getTableName()
-    {
-        return 'txp_css';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-
-    public function importTemplate(oui_flat_TemplateIterator $file)
-    {
-        safe_upsert(
-            $this->getTableName(),
-            "css = '".doSlash($file->getTemplateContents())."'",
-            "name = '".doSlash($file->getTemplateName())."'"
-        );
+    public function accept() {
+        return $this->isDir() || $this->isValidTemplate();
     }
 }

@@ -1,10 +1,10 @@
 {
     "title": "About",
+    "description": "Website infos and credits.",
     "page": "default",
     "css": "default",
     "is_default": false,
     "in_rss": false,
     "on_frontpage": false,
-    "searchable": true,
-    "description": "Informations about this website."
+    "searchable": true
 }

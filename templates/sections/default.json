@@ -1,10 +1,10 @@
 {
     "title": "Default",
-    "page": "default",
-    "css": "default",
+    "description": "Website homepage.",
+    "page": "example_page",
+    "css": "example",
     "is_default": false,
     "in_rss": true,
     "on_frontpage": true,
-    "searchable": true,
-    "description": "Default contents."
+    "searchable": true
 }
