@@ -1,199 +1,192 @@
 h1. oui_flat
 
-"Download":https://github.com/NicolasGraph/oui_flat/releases
+"Download":https://github.com/nicolasgraph/oui_flat/releases | "Packagist":https://packagist.org/packages/oui/oui_flat | "Donate to the original author":http://ouiforum.biz/donate/oui_flat
 
-This plugin makes your "Textpattern CMS":http://www.textpattern.com database more flat, manageable and editable. Edit templates, forms, pages, preferences, variables and sections as flat files. Use any editor, work in teams and store your website's source under your favorite "version control system":http://en.wikipedia.org/wiki/Revision_control.
+This plugin makes your "Textpattern CMS":http://www.textpattern.com database more flat, manageable and editable. Edit templates, forms, pages, preferences and sections as flat files. Use any editor, work in teams and store your website's source under your favorite "version control system":http://en.wikipedia.org/wiki/Revision_control.
 
-*Warning: this plugin will permanently remove your current templates when a valid path will be saved under the plugin prefs.*
+*Warning: this plugin will permanently remove some of your current templates when activated.*
 
-h2. Table of contents
+h2. Installing
 
-* "Plugin requirements":#requirements
-* "Installation":#installation
-* "Preferences":#prefs
-* "Basics":#basics
-* "Stucture":#structure
-* "File examples":#examples
-** "Sections":#sections
-** "Preferences":#preferences
-** "Variables":#variables
-** "textpacks":#textpacks
-* "Author":#author
-* "Licence":#licence
-* "Changelog":#changelog
+Using "Composer":http://getcomposer.org:
 
-h2(#requirements). Plugin requirements
+bc. $ composer require oui/oui_flat:*
 
-oui_flat’s minimum requirements:
+Or "download":https://github.com/nicolasgraph/oui_flat/releases a plugin package.
 
-* Textpattern 4.5+
+h2. Requirements
 
-h2(#installation). Installation
+* Textpattern 4.6.0 or newer.
+* PHP 5.3.6 or newer.
 
-h3. Via composer
+h2. Basics
 
-bc. $ composer require oui/oui_flat
+oui_flat imports normal, flat files from a specified directory to your Textpattern database. This, in essence, lets you to edit your database contents from any regular editor and store the source as flat files.
 
-h3. Manually
+oui_flat comes with built-in support for a few essential content types: styles, forms, pages, preferences, sections and textpacks. It is also able to manage variables via plugin prefs. See the "templates":https://github.com/nicolasgraph/oui_flat/tree/master/templates directory on GitHub for an example how this all works.
 
-# Paste the content of the plugin file under the *Admin > Plugins*, upload it and install;
-# Visit the *Admin>Preferences* tab to fill the plugin prefs.
+Your flat files are imported to the database:
 
-h2(#prefs). Preferences / options
+* Automatically on the background when the site is in the production status selected via the related plugin preference.
+* When the public callback hook URL is accessed. The URL can be used for deployment.
 
-* *Path to the templates directory* - Specifies path to the root templates directory containing all the content-type specific directories. This path is relative to your 'textpattern' installation directory. For example, a path @../themes/my_theme@ would point to a directory located in the same directory as your _textpattern_ directory and the main _index.php_ file.
-* *Security key for the public callback* - Security key for the public callback hook URL. Importing is done when the URL is accessed. The URL follows the format of:
-* *Production status for the systematic upload* - The site production status for which you want to activate the systematic templates upload (see "Basics":#basics).
+If you want to exclude a certain content type from importing, just don't create a directory for it. No directory, and oui_flat will leave the database alone when it comes to that content type.
+
+h2. Preferences
+
+The plugin has set of preferences you can find on Textpattern's normal preferences panel.
+
+h3. Path to the templates directory
+
+Specifies path to the root templates directory containing all the content-type specific directories. This path is relative to your 'textpattern' installation directory. For example, a path @../templates@ would point to a directory located in the same directory as your _textpattern_ directory and the main _index.php_ file.
+
+h3. Security key for the public callback
+
+Security key for the public callback hook URL. Importing is done when the URL is accessed. The URL follows the format of:
 
 bc. http://example.com/?oui_flat_key={yourKey}
 
 Where @http://example.com/@ is your site's URL, and @{yourKey}@ is the security key you specified.
 
-h2(#basics). Basics
+h2. Templates folder example
 
-Your flat files are imported to the database:
+bc.. ┌ templates
+├── forms
+├── pages
+├── prefs
+├── sections
+├── styles
+├── textpacks
+└── variables
 
-* Automatically on the background when the site is in the production status selected in the related plugin preference.
-* When the public callback hook URL is accessed. The URL can be used for deployment.
+p. For most existing template subfolders, the related admin tab will be disable.
+The _Admin > Preferences_ tab will still be accessible, however saved preferences will be overriden by existing flat files while the @/prefs@ folder exists
+The admin _Admin > languages_ tab will still be accessible and usable while the @/pages@ folder exists.
 
-1. Variables are imported only once to avoid the override of user strings. To update them, remove or rename .json files and refresh.
+Contained files can use whatever extension.
 
-If you want to exclude a certain content type from importing, just don't create a directory for it. No directory, and oui_flat will leave the database alone when it comes to that content type.
+h3. Forms
 
-h3. About variables
+Form types can be defined by filename prefixes or @/forms@ subfolder names.
+@misc@ type is used by default when no prefix is found in files stored directly in the @/form@ folder.
 
-This plugin allow to set variables via flat files by setting custom preferences.
-These prefs are visible by default under the _Preferences_ tab to allow users to set or change their value but you can also hide some of them (see "here":#variables) if they don't need to be override. Custom preferences are then injected by the plugin to be used as Txp variables like so: @<txp:variable name="my-variable"/>@ where _my-variable_ is the name of the related .json file.
+bc.. ┌ templates
+├── forms
+├──── article.example_1.txp
+├──── example_2.txp
+├──── …
+├── …
 
-h2(#structure). Structure
+p. or
 
-* my-folder
-** sections
-*** my-section.json
-** pages
-**** my-page.txp
-** forms
-*** article
-**** my-article-form.txp
-*** comment
-**** my-comment-form.txp
-*** category
-**** …
-*** section
-*** link
-*** file
-*** misc
-*** custom
-** prefs
-*** sitename.json
-** variables
-*** my-variable.json
-** styles
-*** my-styles.css
+bc.. ┌ templates
+├── forms
+├──── article
+├────── example_1.txp
+├────── …
+├──── misc
+├────── example_2.txp
+├────── …
+├──── …
+├── …
 
-*Warning: while forms are now organised by types, they all still need to have different names.*
+h3. Pages
 
-h2(#examples). File examples
+bc.. ├── …
+├── pages
+├──── example.txp
+├──── …
+├── …
 
-h3(#sections). Sections
+h3. Prefs
 
-Here is an example of content for an @about.json@ file.
+Prefs files can contain a JSON tree or just the preference value as text.
 
-bc.. {
-    "title": "About",
-    "page": "default",
-    "css": "default",
-    "is_default": false,
-    "in_rss": false,
-    "on_frontpage": false,
-    "searchable": true,
-    "description": "Informations about this website."
-}
+bc.. ├── …
+├── prefs
+├──── sitename.json
+├──── site_slogan.txt
+├──── …
+├── …
 
-p. where:
+p. Available JSON field is:
 
-* @"title": "…"@ - The title of the section.
-* @"page": "…"@ - The name of the section.
-* @"css": "…"@ - The stylesheet used by the section.
-* @"is_default": "…"@ - ?
-* @"in_rss": "…"@ - Whether to display section articles in the feeds or not.
-* @"on_frontpage": "…"@ - Whether to display section articles on the front page or not.
-* @"searchable": "…"@ - Use false to exclude section articles of the search results.
-* @"description": "…"@ - The description of the section.
+* @val@ (string): preference value;
 
-h3(#preferences). Preferences
+@sitename.txt@ would just contain the preference related value.
 
-The plugin has set of preferences you can find on Textpattern's normal preferences panel.
-Here is an example of content for a @sitename.json@ file.
+h3. Sections
 
-bc.. {
-    "value": "My website"
-}
+Sections files are managed via JSON files.
 
-p. where:
+bc.. ├── …
+├── sections
+├──── example.json
+├──── …
+├── …
 
-* @"value": "…"@ - The value of the preference.
+p. Available JSON fields are:
 
-h3(#variables). Variables (through custom prefs)
+* @title@ (string): section title;
+* @description@ (string): section meta-description;
+* @page@ (string): page in use;
+* @css@ (string): styles in use;
+* @is_default@ (bool): @true@ makes it the default section;
+* @in_rss@ (bool): @true@ includes section articles in feeds;
+* @on_frontpage@ (bool): @true@ displays section articles on the frontpage; 
+* @searchable@ (bool): @true@ includes section articles in search results.
 
-Here is an example of content for a @menu_sections.json@ file.
+h3. Styles
 
-bc.. {
-    "value": "articles, about, contact",
-    "type": "PREF_HIDDEN",
-    "event": "oui_flat_var",
-    "html": "text_input",
-    "position": "10",
-    "is_private": true
-}
+bc.. ├── …
+├── styles
+├──── default.css
+├──── …
+├── …
 
-p. where each data is optional and the default values are the following:
+h3. textpacks
 
-* @"value": "…"@ - _default: '' (empty)_ - The default value of the preference.
-* @"type": "…"@ - _default: PREF_PLUGIN (for Txp 4.6, else PREF_ADVANCED)_ - To hide a pref in the _Preferences_ tab, use _PREF_HIDDEN_, you should probably not use _PREF_CORE_.
-* "event": "…" - _default: 'oui_flat_var'_ - The prefs group name where you want to display your custom pref.
-* @"html": "…"@ - _default: 'text_input'_ - To display radio buttons, use _onoffradio_ or _yesnoradio_.
-* @"position": "…"@ - _default: 0_ - Use position to sort your prefs.
-* @"is_private": "…"@ - _default: false_ - If _true_, the pref will be user related.
+bc.. ├── …
+├── textpacks
+├──── example.textpack
+├──── …
+├── …
 
-p. While you can call your custom preference as a Txp variable like so: @<txp:variable name="menu_sections" />@; they will be prefixed with @oui_flat_var_@ under the preferences tab and you will need to use the textpack as below to add user friendly titles.
+h3. Variables
 
-h3(#textpacks). Textpacks
+Variables can be defined via JSON files as plugin prefs and used through the @<txp:variable />@ tag.
 
-Here is an example of content for a @en-gb.json@ file.
+bc.. ├── …
+├── variables
+├──── example.json
+├──── …
 
-bc.. {
-    "admin": {
-        "oui_flat_var_menu_sections": "Sections used in the menu"
-    },
-    "common": {
-    },
-    "public": {
-        "public_side_text_item": "A public side text item",
-        "another_text_item": "Another public side text item"
-    }
-}
+p. Available JSON fields are:
 
-p. Text strings are only updated if they already exist, otherwise, they can be inserted, updated or removed.
+* @value@ (string): variable value;
+* @html@ (string): name of the function to use in the admin (if the @/variables@ is removed). Natively available functions are: @text_input@, @pref_long_text@, @yesnoradio@.
+* @position@ (int): variable position.
 
-h2(#author). Author
+h2. Toolshed notice
 
-"Nicolas Morand":https://github.com/, from "rah_flat":https://github.com/gocom/rah_flat by "Jukka Svahn":http://rahforum.biz/.
+This is a toolshed project. Experimental fork from "rah_flat":https://github.com/gocom/oui_flat which is not part of the main supported product line of "Rah"https://github.com/gocom. Not yet at least. Please use at your own risk.
 
-h2(#licence). Licence
+h2. Changelog
 
-This plugin is distributed under "GPLv2":http://www.gnu.org/licenses/gpl-2.0.fr.html.
+h3. Version 0.7.0-beta (oui_flat from upcoming rah_flat-v0.4) - 2017/06/25
 
-h2(#Changelog). Changelog
+* Changed: requires Textpatern 4.6+
+* Added: Do not delete pages or styles that are used by a section.
+* Changed: variables use @rah_flat_variables@ event only and are all visible or hidden as for other contents;
+* Changed: preferences stay always visible.
+* Improved: Uses original Textpacks format;
 
-* To do: Fix the _Options_ link.
-
-h3. Version 0.6.0 - 2017/03/14
+h3. Version 0.6.0 (oui_flat) - 2017/03/14
 
 * Changed: Back to @oui_@ plugin author prefix.
 * Changed: Lighten compiled code by removing duplicated license infos.
 
-h3. Version 0.5.0 (rah_flat) - 2016/08/26
+h3. Version 0.5.0 (oui_flat) - 2016/08/26
 
 * Changed: Forms are stored by types in subfolders and don't need prefixes anymore.
 * Added: Custom form types are changed to 'misc' when the plugin is disable to avoid an error in the Forms tab.
@@ -202,7 +195,25 @@ h3. Version 0.5.0 (rah_flat) - 2016/08/26
 * Added: Custom prefs (in the variables folder) accept more paramters in .json files.
 * Changed: Custom prefs (in the variables folder) now have a oui_flat_var_ prefix added to their name.
 
-h3. Version 0.4.0 - 2015/11/29
+h3. Version 0.4.0 (oui_flat) - 2015/11/29
 
 * Added: Custom preferences can be created and use as Txp variables.
 * Changed: Forms naming convention is now @type.name.txp@.
+
+h3. Version 0.3.0 (rah_flat) - 2014/03/28
+
+* Added: Drop access to a admin-side panel only if the specific content-type is active and has a directory set up.
+* Added: Invokable @oui_flat.import@ callback event.
+* Added: Sections and preferences get their names from the filename.
+* Added: Preferences are always just updated, no strands are created.
+* Added: Preference fields that are not specified in a file are kept as-is in the database.
+* Added: French translation by "Patrick Lefevre":https://github.com/cara-tm.
+* Changed: Renamed confusing @Oui_Flat_Import_Template@ interface to @Oui_Flat_Import_ImportInterface@.
+
+h3. Version 0.2.0 (rah_flat) - 2014/03/19
+
+* Reworked.
+
+h3. Version 0.1.0 (rah_flat) - 2013/05/07
+
+* Initial release.
