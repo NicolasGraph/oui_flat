@@ -1,7 +1,7 @@
 {
     "name": "oui_flat",
     "description": "Edit templates as flat files (rah_flat fork)",
-    "version": "0.7.0-beta",
+    "version": "0.7.0-beta2",
     "type": 1,
     "author": "Nicolas Morand, Jukka Svahn",
     "author_uri": "https://github.com/nicolasgraph",
