@@ -177,7 +177,7 @@ function oui_flat_status($name, $val)
         'testing'        => gTxt('production_test'),
         'debug, testing' => gTxt('production_debug').', '.lcfirst(gTxt('production_test')),
     );
-    return selectInput($name, $vals, $val, true, '', $name);
+    return selectInput($name, $vals, $val, false, '', $name);
 }
 
 new Oui_Flat();
